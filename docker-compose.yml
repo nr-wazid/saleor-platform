@@ -90,12 +90,42 @@ services:
     networks:
       - saleor-backend-tier
 
+  agent-db:
+    image: pgvector/pgvector:pg18-trixie
+    ports:
+      - 5433:5432
+    restart: unless-stopped
+    networks:
+      - saleor-backend-tier
+    volumes:
+      - agent-db:/var/lib/postgresql
+    environment:
+      POSTGRES_USER: saleor_agent
+      POSTGRES_PASSWORD: saleor_agent
+      POSTGRES_DB: saleor_agent
+
+  pinchtab:
+    image: pinchtab/pinchtab:latest
+    ports:
+      - 127.0.0.1:9867:9867
+    restart: unless-stopped
+    networks:
+      - saleor-backend-tier
+    volumes:
+      - pinchtab-data:/data
+    environment:
+      PINCHTAB_TOKEN: "saleor-agent-token"
+
 volumes:
   saleor-db:
     driver: local
   saleor-cache:
     driver: local
   saleor-media:
+  agent-db:
+    driver: local
+  pinchtab-data:
+    driver: local
 
 networks:
   saleor-backend-tier:

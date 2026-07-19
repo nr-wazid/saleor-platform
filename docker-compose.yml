@@ -126,7 +126,6 @@ volumes:
     driver: local
   pinchtab-data:
     driver: local
-
 networks:
   saleor-backend-tier:
     driver: bridge
